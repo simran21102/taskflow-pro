@@ -12,7 +12,6 @@ import {
   Menu,
   Moon,
   Plus,
-  Search,
   Settings,
   Sun,
   User,
@@ -21,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Breadcrumbs from '../components/Breadcrumbs';
+import GlobalSearch from '../components/GlobalSearch';
 import NotificationDropdown from '../components/NotificationDropdown';
 
 const navItems = [
@@ -121,11 +121,7 @@ const AppLayout = () => {
               <div className="hidden min-w-0 shrink-0 xl:block">
                 <Breadcrumbs />
               </div>
-              <label className="relative hidden min-w-0 flex-1 lg:block 2xl:max-w-xl">
-                <span className="sr-only">Global search</span>
-                <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-                <input className="h-12 w-full rounded-2xl border bg-slate-50 pl-11 pr-4 text-sm font-medium placeholder:text-slate-400 hover:bg-white focus:bg-white dark:bg-slate-900 dark:hover:bg-slate-900" placeholder="Search projects, tasks, teammates..." />
-              </label>
+              <GlobalSearch />
             </div>
 
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">

@@ -1,6 +1,7 @@
 import { MoreHorizontal, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useSearchParams } from 'react-router-dom';
 import Badge from '../components/Badge';
 import ConfirmDialog from '../components/ConfirmDialog';
 import DataTable from '../components/DataTable';
@@ -31,12 +32,13 @@ const priorityOptions = [
 
 const Tasks = () => {
   const { isAdmin } = useAuth();
+  const [searchParams] = useSearchParams();
   const [tasks, setTasks] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, pages: 1 });
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [filters, setFilters] = useState({ search: '', status: '', priority: '', projectId: '', assignedToId: '', page: 1 });
+  const [filters, setFilters] = useState({ search: searchParams.get('search') || '', status: '', priority: '', projectId: '', assignedToId: '', page: 1 });
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState(emptyTask);
   const [removeId, setRemoveId] = useState(null);
@@ -63,6 +65,11 @@ const Tasks = () => {
   useEffect(() => {
     load();
   }, [JSON.stringify(filters)]);
+
+  useEffect(() => {
+    const search = searchParams.get('search') || '';
+    setFilters((current) => (current.search === search ? current : { ...current, search, page: 1 }));
+  }, [searchParams]);
 
   const updateStatus = async (task, status) => {
     try {

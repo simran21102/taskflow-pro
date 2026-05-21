@@ -1,10 +1,24 @@
 import { CheckCircle2, Gauge, Mail, Shield } from 'lucide-react';
+import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Badge from '../components/Badge';
 import SkeletonLoader from '../components/SkeletonLoader';
 import { useApi } from '../hooks/useApi';
 
 const Team = () => {
+  const [searchParams] = useSearchParams();
   const { data: users, loading } = useApi('/users', { initialData: [] });
+  const search = searchParams.get('search') || '';
+  const filteredUsers = useMemo(() => {
+    if (!search) return users;
+    const query = search.toLowerCase();
+    return users.filter((user) =>
+      user.name.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query) ||
+      user.role.toLowerCase().includes(query)
+    );
+  }, [users, search]);
+
   if (loading) return <SkeletonLoader rows={4} />;
 
   return (
@@ -16,7 +30,7 @@ const Team = () => {
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {users.map((user, index) => (
+        {filteredUsers.map((user, index) => (
           <article key={user.id} className="surface surface-hover overflow-hidden p-5">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-4">
